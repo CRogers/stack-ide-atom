@@ -1,0 +1,6 @@
+dist/
+tags
+.cabal-sandbox
+cabal.config
+cabal.sandbox.config
+.stack-work
