@@ -1,6 +1,6 @@
 {
   "name": "atom-stack-ide",
-  "main": "./lib/atom-stack-ide",
+  "main": "./haskell/dist/build/atom-stack-ide/atom-stack-ide.jsexe/all.js",
   "version": "0.1.0",
   "description": "A short description of your package",
   "keywords": [
