@@ -1,0 +1,3 @@
+#!/bin/sh
+
+docker run -t -v "$(pwd):/blah" fpco/stack-ghcjs-build:lts-2.16 /bin/sh -c "cd blah && ./gulp $@"

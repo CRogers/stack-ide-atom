@@ -2,7 +2,7 @@ gulp = require('gulp')
 shell = require('gulp-shell')
 
 haskellCmds = (cmds) ->
-  shell.task(cmds, {cwd: haskell})
+  shell.task(cmds, {cwd: 'haskell'})
 
 gulp.task 'create-sandbox', haskellCmds([
   'cabal sandbox init'
@@ -14,7 +14,7 @@ gulp.task 'install-deps', ['create-sandbox'], haskellCmds([
   'cabal install --only-dependencies --ghcjs'
 ])
 
-gulp.task 'build', ['install-deps'], haskellCmds([
+gulp.task 'build-haskell', ['install-deps'], haskellCmds([
   'cabal configure --ghcjs'
   'cabal build'
 ])
