@@ -3,7 +3,7 @@ class AtomStackIdeView
   constructor: (serializedState) ->
     # Create root element
     @element = document.createElement('div')
-    @element.classList.add('atom-stack-ide')
+    @element.classList.add('stack-ide-atom')
 
     # Create message element
     message = document.createElement('div')

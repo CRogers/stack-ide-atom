@@ -1,14 +1,14 @@
 {
-  "name": "atom-stack-ide",
-  "main": "./haskell/dist/build/atom-stack-ide/atom-stack-ide.jsexe/all.js",
+  "name": "stack-ide-atom",
+  "main": "./haskell/dist/build/stack-ide-atom/stack-ide-atom.jsexe/all.js",
   "version": "0.1.0",
   "description": "A short description of your package",
   "keywords": [
   ],
   "activationCommands": {
-    "atom-workspace": "atom-stack-ide:toggle"
+    "atom-workspace": "stack-ide-atom:toggle"
   },
-  "repository": "https://github.com/atom/atom-stack-ide",
+  "repository": "https://github.com/atom/stack-ide-atom",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"

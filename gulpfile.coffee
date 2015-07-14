@@ -26,7 +26,7 @@ GENERATED_HASKELL_DIR = path.resolve('./lib/haskell/generated')
 
 gulp.task 'copy-generated-js', ['build-haskell'], shell.task([
   "cp #{GENERATED_JS_FILES} #{GENERATED_HASKELL_DIR}"
-], {cwd: 'haskell/dist/build/atom-stack-ide/atom-stack-ide.jsexe'})
+], {cwd: 'haskell/dist/build/stack-ide-atom/stack-ide-atom.jsexe'})
 
 gulp.task 'build', ['copy-generated-js'], shell.task([
   "cat ../module-start.js #{GENERATED_JS_FILES} ../module-end.js >haskell.js"

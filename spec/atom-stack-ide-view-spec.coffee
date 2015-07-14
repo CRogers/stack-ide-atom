@@ -1,4 +1,4 @@
-AtomStackIdeView = require '../lib/atom-stack-ide-view'
+AtomStackIdeView = require '../lib/stack-ide-atom-view'
 
 describe "AtomStackIdeView", ->
   it "has one valid test", ->

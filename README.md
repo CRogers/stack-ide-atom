@@ -1,4 +1,4 @@
-# atom-stack-ide package
+# stack-ide-atom package
 
 A short description of your package.
 

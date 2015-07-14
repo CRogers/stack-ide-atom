@@ -1,4 +1,4 @@
-AtomStackIde = require '../lib/atom-stack-ide'
+AtomStackIde = require '../lib/stack-ide-atom'
 
 # Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.
 #
@@ -10,30 +10,30 @@ describe "AtomStackIde", ->
 
   beforeEach ->
     workspaceElement = atom.views.getView(atom.workspace)
-    activationPromise = atom.packages.activatePackage('atom-stack-ide')
+    activationPromise = atom.packages.activatePackage('stack-ide-atom')
 
-  describe "when the atom-stack-ide:toggle event is triggered", ->
+  describe "when the stack-ide-atom:toggle event is triggered", ->
     it "hides and shows the modal panel", ->
       # Before the activation event the view is not on the DOM, and no panel
       # has been created
-      expect(workspaceElement.querySelector('.atom-stack-ide')).not.toExist()
+      expect(workspaceElement.querySelector('.stack-ide-atom')).not.toExist()
 
       # This is an activation event, triggering it will cause the package to be
       # activated.
-      atom.commands.dispatch workspaceElement, 'atom-stack-ide:toggle'
+      atom.commands.dispatch workspaceElement, 'stack-ide-atom:toggle'
 
       waitsForPromise ->
         activationPromise
 
       runs ->
-        expect(workspaceElement.querySelector('.atom-stack-ide')).toExist()
+        expect(workspaceElement.querySelector('.stack-ide-atom')).toExist()
 
-        atomStackIdeElement = workspaceElement.querySelector('.atom-stack-ide')
+        atomStackIdeElement = workspaceElement.querySelector('.stack-ide-atom')
         expect(atomStackIdeElement).toExist()
 
         atomStackIdePanel = atom.workspace.panelForItem(atomStackIdeElement)
         expect(atomStackIdePanel.isVisible()).toBe true
-        atom.commands.dispatch workspaceElement, 'atom-stack-ide:toggle'
+        atom.commands.dispatch workspaceElement, 'stack-ide-atom:toggle'
         expect(atomStackIdePanel.isVisible()).toBe false
 
     it "hides and shows the view", ->
@@ -45,18 +45,18 @@ describe "AtomStackIde", ->
       # workspaceElement to the DOM are generally slower than those off DOM.
       jasmine.attachToDOM(workspaceElement)
 
-      expect(workspaceElement.querySelector('.atom-stack-ide')).not.toExist()
+      expect(workspaceElement.querySelector('.stack-ide-atom')).not.toExist()
 
       # This is an activation event, triggering it causes the package to be
       # activated.
-      atom.commands.dispatch workspaceElement, 'atom-stack-ide:toggle'
+      atom.commands.dispatch workspaceElement, 'stack-ide-atom:toggle'
 
       waitsForPromise ->
         activationPromise
 
       runs ->
         # Now we can test for view visibility
-        atomStackIdeElement = workspaceElement.querySelector('.atom-stack-ide')
+        atomStackIdeElement = workspaceElement.querySelector('.stack-ide-atom')
         expect(atomStackIdeElement).toBeVisible()
-        atom.commands.dispatch workspaceElement, 'atom-stack-ide:toggle'
+        atom.commands.dispatch workspaceElement, 'stack-ide-atom:toggle'
         expect(atomStackIdeElement).not.toBeVisible()

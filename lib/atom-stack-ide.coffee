@@ -1,4 +1,4 @@
-AtomStackIdeView = require './atom-stack-ide-view'
+AtomStackIdeView = require './stack-ide-atom-view'
 {CompositeDisposable} = require 'atom'
 
 module.exports = AtomStackIde =
@@ -14,7 +14,7 @@ module.exports = AtomStackIde =
     @subscriptions = new CompositeDisposable
 
     # Register command that toggles this view
-    @subscriptions.add atom.commands.add 'atom-workspace', 'atom-stack-ide:toggle': => @toggle()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'stack-ide-atom:toggle': => @toggle()
 
   deactivate: ->
     @modalPanel.destroy()
