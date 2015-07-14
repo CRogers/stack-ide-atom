@@ -1,0 +1,27 @@
+{
+  "name": "atom-stack-ide",
+  "main": "./lib/atom-stack-ide",
+  "version": "0.1.0",
+  "description": "A short description of your package",
+  "keywords": [
+  ],
+  "activationCommands": {
+    "atom-workspace": "atom-stack-ide:toggle"
+  },
+  "repository": "https://github.com/atom/atom-stack-ide",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "gulp": "*",
+    "coffee-script": "*",
+    "del": "*",
+    "gulp-shell": "*"
+  },
+  "scripts": {
+    "shrinkwrap": "npm shrinkwrap --dev && node ./tasks/shrinkwrap-remove-resolved.js"
+  }
+}
