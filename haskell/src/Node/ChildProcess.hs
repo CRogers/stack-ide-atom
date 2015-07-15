@@ -32,11 +32,17 @@ foreign import javascript unsafe
   "$1.stdout" stdout :: ChildProcess -> IO Stream
 
 foreign import javascript unsafe
-  "$1.on($2, $3)" js_on :: Stream -> JSString -> JSFun (JSString -> IO ()) -> IO ()
+  "$1.on($2, $3)" js_on :: Stream -> JSString -> JSFun (Buffer -> IO ()) -> IO ()
 
 type EventName = JSString
 
-on :: Stream -> EventName -> (JSString -> IO ()) -> IO ()
+data Buffer_
+type Buffer = JSRef Buffer_
+
+on :: Stream -> EventName -> (Buffer -> IO ()) -> IO ()
 on stream eventName f = do
   callback <- syncCallback1 AlwaysRetain False f
   js_on stream eventName callback
+
+foreign import javascript unsafe
+  "$1.toString()" toString :: JSRef a -> IO JSString

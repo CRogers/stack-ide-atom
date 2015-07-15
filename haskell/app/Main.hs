@@ -6,7 +6,7 @@ import GHCJS.Types (JSString)
 import Node.ChildProcess
 
 foreign import javascript unsafe
-  "console.log($1.toString())" consoleLog :: JSString -> IO ()
+  "console.log($1.toString())" consoleLog :: Buffer -> IO ()
 
 main :: IO ()
 main = do

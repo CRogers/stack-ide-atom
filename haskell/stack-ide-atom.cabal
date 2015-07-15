@@ -40,5 +40,6 @@ test-suite hspec
   main-is:             Spec.hs
   build-depends:       base == 4.*
                      , stack-ide-atom
+                     , ghcjs-base
                      , hspec
   default-language:    Haskell2010
