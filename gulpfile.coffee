@@ -13,12 +13,23 @@ gulp.task 'create-sandbox', haskellCmds([
 ])
 
 gulp.task 'install-deps', ['create-sandbox'], haskellCmds([
-  'cabal install --only-dependencies --ghcjs'
+  'cabal update'
+  'cabal install --only-dependencies --enable-tests --ghcjs'
 ])
 
-gulp.task 'build-haskell', [], haskellCmds([
-  'cabal configure --ghcjs'
+gulp.task 'configure-haskell', [], haskellCmds([
+  'cabal configure --enable-tests --ghcjs'
+])
+
+gulp.task 'build-haskell', ['configure-haskell'], haskellCmds([
   'cabal build'
+])
+
+hspecLoc = 'dist/build/hspec/hspec'
+
+gulp.task 'test', ['build-haskell'], haskellCmds([
+  "echo 'function h$putenv(){}' >>#{hspecLoc}"
+  "node #{hspecLoc}"
 ])
 
 GENERATED_JS_FILES = ['rts.js','lib.js','out.js'].join(' ')
