@@ -1,6 +1,9 @@
 AtomStackIdeView = require './stack-ide-atom-view'
 {CompositeDisposable} = require 'atom'
 
+haskell = require('./haskell/generated/haskell')
+haskell.main()
+
 module.exports = AtomStackIde =
   atomStackIdeView: null
   modalPanel: null

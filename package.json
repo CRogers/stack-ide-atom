@@ -1,10 +1,9 @@
 {
   "name": "stack-ide-atom",
-  "main": "./haskell/dist/build/stack-ide-atom/stack-ide-atom.jsexe/all.js",
+  "main": "./lib/stack-ide-atom",
   "version": "0.1.0",
   "description": "A short description of your package",
-  "keywords": [
-  ],
+  "keywords": [],
   "activationCommands": {
     "atom-workspace": "stack-ide-atom:toggle"
   },
@@ -13,12 +12,11 @@
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
-    "gulp": "*",
     "coffee-script": "*",
     "del": "*",
+    "gulp": "*",
     "gulp-shell": "*"
   },
   "scripts": {
