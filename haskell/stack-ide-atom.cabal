@@ -20,6 +20,7 @@ executable stack-ide-atom
   -- other-modules:
   -- other-extensions:
   build-depends:       base >=4.7 && <4.8
+                     , ghcjs-base
                      , stack-ide-api
   hs-source-dirs:      src
   cpp-options:         -DGHCJS_BROWSER
