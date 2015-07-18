@@ -9,6 +9,9 @@ import NiceChildProcess
 should = it
 xshould _ _ = return ()
 
+repeater :: IO ChildProcess
+repeater = spawn "cat" [] "."
+
 spec :: Spec
 spec = do
   describe "NiceChildProcess should" $ do
@@ -30,20 +33,20 @@ spec = do
       line2 `shouldBe` "line two"
 
     should "read a line after writing a line" $ do
-      childProcess <- spawn "cat" [] "."
+      childProcess <- repeater
       writeLine childProcess "foobar"
       line <- readLine childProcess
       line `shouldBe` "foobar"
 
     should "write a line, read a line, write a line, read a line" $ do
-      childProcess <- spawn "cat" [] "."
+      childProcess <- repeater
       writeLine childProcess "foo"
       readLine childProcess >>= (`shouldBe` "foo")
       writeLine childProcess "bar"
       readLine childProcess >>= (`shouldBe` "bar")
 
     should "write a line, write a line, read a line, read a line" $ do
-      childProcess <- spawn "cat" [] "."
+      childProcess <- repeater
       writeLine childProcess "foo"
       writeLine childProcess "bar"
       readLine childProcess >>= (`shouldBe` "foo")
