@@ -1,19 +1,23 @@
-{-# LANGUAGE DeriveFunctor, TemplateHaskell, FlexibleContexts #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module StackIde where
 
 import Control.Monad.Free
-import Control.Monad.Free.TH (makeFree)
-
 import Stack.Ide.JsonAPI
 
-data StackIde next
-  = GetVersion (VersionInfo -> next)
-  deriving Functor
+import StackIdeM
+import NiceChildProcess
 
-makeFree ''StackIde
+runStackIde :: StackIdeM a -> IO a
+runStackIde = iterM run where
+  run :: StackIde (IO a) -> IO a
+  run stackIde = case stackIde of
+    CreateSession directory next -> do
+      childProcess <- spawn "stack" ["ide"] directory
+      version <- readLine childProcess
+      putStrLn (show version)
+      next
 
-type StackIdeM = Free StackIde
-
-request :: Request -> IO Response
-request req = undefined
+    GetVersion f -> do
+      putStrLn "verion yay"
+      f undefined
