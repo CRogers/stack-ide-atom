@@ -22,8 +22,8 @@ instance Eq JSString where
   str1 == str2 = fromJSBool (str1 `js_str_eq` str2)
 
 spec = do
-  describe "Node.ChildProcess" $ do
-    it "should spawn a process correctly" $ do
+  describe "Node.ChildProcess should" $ do
+    it "spawn a process correctly" $ do
       childProcess <- spawn "echo" ["lel"] "."
       stream <- stdout childProcess
       sema <- newEmptyMVar
@@ -32,3 +32,13 @@ spec = do
         putMVar sema str
       value <- takeMVar sema
       value `shouldBe` "lel\n"
+
+    it "set the cwd properly" $ do
+      childProcess <- spawn "pwd" [] "/etc"
+      stream <- stdout childProcess
+      sema <- newEmptyMVar
+      on stream "data" $ \buffer -> do
+        str <- toString buffer
+        putMVar sema str
+      value <- takeMVar sema
+      value `shouldBe` "/etc\n"

@@ -43,3 +43,6 @@ gulp.task 'build', ['copy-generated-js'], shell.task([
   "cat ../module-start.js #{GENERATED_JS_FILES} ../module-end.js >haskell.js"
   "rm #{GENERATED_JS_FILES}"
 ], {cwd: GENERATED_HASKELL_DIR})
+
+gulp.task 'watch-test', ->
+  gulp.watch 'haskell/**/*.hs', ['test']
