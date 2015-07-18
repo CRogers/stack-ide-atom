@@ -4,6 +4,7 @@ module NiceChildProcess where
 
 import Control.Concurrent.MVar
 import Control.Applicative
+import Control.Monad
 import Data.IORef
 import Data.Monoid
 import Data.Text (Text)
@@ -17,16 +18,25 @@ type Command = Text
 type Arg = Text
 type Directory = Text
 
-newtype ChildProcess = ChildProcess CP.ChildProcess
+type LineBuffer = IORef [Text]
+type Semaphore = MVar ()
+
+data ChildProcess = ChildProcess CP.ChildProcess LineBuffer Semaphore
 
 spawn :: Command -> [Arg] -> Directory -> IO ChildProcess
-spawn command args cwd = ChildProcess <$> CP.spawn (toJSString command) (map toJSString args) (toJSString cwd)
-
-readLine :: ChildProcess -> IO Text
-readLine (ChildProcess childProcess) = do
+spawn command args cwd = do
+  childProcess <- CP.spawn (toJSString command) (map toJSString args) (toJSString cwd)
   outStream <- CP.stdout childProcess
+  lineBuffer <- newIORef []
   sema <- newEmptyMVar
   CP.onData outStream $ \buffer -> do
-    str <- CP.toString buffer
-    putMVar sema (T.dropWhileEnd (== '\n') $ fromJSString str)
+    text <- fromJSString <$> CP.toString buffer
+    let pieces = T.splitOn "\n" text
+    modifyIORef' lineBuffer (<> pieces)
+    replicateM_ (length pieces) $ putMVar sema ()
+  return $ ChildProcess childProcess lineBuffer sema
+
+readLine :: ChildProcess -> IO Text
+readLine (ChildProcess childProcess lineBuffer sema) = do
   takeMVar sema
+  atomicModifyIORef' lineBuffer (\(l:ls) -> (ls, l))
