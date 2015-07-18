@@ -12,12 +12,12 @@ gulp.task 'create-sandbox', haskellCmds([
   'cabal sandbox add-source ../stack-ide/stack-ide-api'
 ])
 
-gulp.task 'install-deps', ['create-sandbox'], haskellCmds([
+gulp.task 'install-deps', haskellCmds([
   'cabal update'
   'cabal install --only-dependencies --enable-tests --ghcjs'
 ])
 
-gulp.task 'configure-haskell', [], haskellCmds([
+gulp.task 'configure-haskell', haskellCmds([
   'cabal configure --enable-tests --ghcjs'
 ])
 
