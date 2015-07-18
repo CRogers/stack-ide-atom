@@ -34,3 +34,10 @@ spec = do
       writeLine childProcess "foobar"
       line <- readLine childProcess
       line `shouldBe` "foobar"
+
+    should "write a line, read a line, write a line, read a line" $ do
+      childProcess <- spawn "cat" [] "."
+      writeLine childProcess "foo"
+      readLine childProcess >>= (`shouldBe` "foo")
+      writeLine childProcess "bar"
+      readLine childProcess >>= (`shouldBe` "bar")

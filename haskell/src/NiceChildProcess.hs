@@ -31,7 +31,7 @@ spawn command args cwd = do
   sema <- newEmptyMVar
   CP.onData outStream $ \buffer -> do
     text <- fromJSString <$> CP.toString buffer
-    let pieces = T.splitOn "\n" text
+    let pieces = T.lines text
     modifyIORef' lineBuffer (<> pieces)
     replicateM_ (length pieces) $ putMVar sema ()
   return $ ChildProcess childProcess lineBuffer sema
