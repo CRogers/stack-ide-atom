@@ -18,7 +18,7 @@ spec = do
       line `shouldBe` "lol"
 
     should "read two lines from a process" $ do
-      childProcess <- spawn "cat" ["test-data/multiline-file"] "."
+      childProcess <- spawn "cat" ["test-data/two-line-file-with-trailing-newline"] "."
       line1 <- readLine childProcess
       line2 <- readLine childProcess
       line1 `shouldBe` "line one"

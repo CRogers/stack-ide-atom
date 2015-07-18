@@ -39,7 +39,7 @@ spec = do
       value `shouldBe` "/etc\n"
 
     it "not produce output line by line" $ do
-      childProcess <- spawn "cat" ["test-data/multiline-file"] "."
+      childProcess <- spawn "cat" ["test-data/two-line-file-with-trailing-newline"] "."
       stream <- stdout childProcess
       sema <- newEmptyMVar
       onData stream $ \buffer -> do
