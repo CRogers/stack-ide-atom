@@ -25,6 +25,10 @@ gulp.task 'build-haskell', ['configure-haskell'], haskellCmds([
   'cabal build'
 ])
 
+gulp.task 'build-stack-ide', shell.task([
+  'stack install stack-ide stack-ide-api ../ide-backend/ide-backend ../ide-backend/ide-backend-server ../ide-backend/ide-backend-common'
+], {cwd: 'stack-ide'})
+
 hspecLoc = 'dist/build/hspec/hspec'
 
 gulp.task 'test', ['build-haskell'], haskellCmds([
