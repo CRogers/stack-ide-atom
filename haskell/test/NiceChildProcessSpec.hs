@@ -17,6 +17,11 @@ spec = do
       line <- readLine childProcess
       line `shouldBe` "lol"
 
+    should "read one line from a process if no newline has appeared" $ do
+      childProcess <- spawn "cat" ["test-data/two-line-file-no-trailing-newline"] "."
+      line1 <- readLine childProcess
+      line1 `shouldBe` "line one"
+
     should "read two lines from a process" $ do
       childProcess <- spawn "cat" ["test-data/two-line-file-with-trailing-newline"] "."
       line1 <- readLine childProcess
