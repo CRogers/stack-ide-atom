@@ -27,6 +27,7 @@ executable stack-ide-atom
 library
   exposed-modules:     Node.ChildProcess
                      , NiceChildProcess
+                     , StackIde
                      , GhcjsExtras
   -- other-modules:
   -- other-extensions:
@@ -34,7 +35,7 @@ library
                      , ghcjs-base
                      , stack-ide-api
                      , text
-                     , stm
+                     , free
   hs-source-dirs:      src
   cpp-options:         -DGHCJS_BROWSER
   default-language:    Haskell2010
