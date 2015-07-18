@@ -8,14 +8,13 @@ This is currently a work in progress. Patches welcome.
 
 Install with:
 
-    $ git clone git@github.com:fpco/ide-backend.git
-    $ git clone git@github.com:commercialhaskell/stack-ide.git
-    $ cd stack-ide
-    $ stack install \
+    git clone https://github.com/fpco/ide-backend.git
+    git clone https://github.com/commercialhaskell/stack-ide.git
+    cd stack-ide
+    stack install \
         stack-ide \
-        stack-ide-api \ 
+        stack-ide-api \
         ../ide-backend/ide-backend \
-        ../ide-backend/ide-backend-rts \
         ../ide-backend/ide-backend-server \
         ../ide-backend/ide-backend-common
 
