@@ -2,6 +2,7 @@
 
 module ChildProcessSpec where
 
+import Control.Applicative
 import Control.Monad
 import Control.Concurrent.MVar
 
@@ -61,3 +62,14 @@ spec = do
       onError childProcess $ \err -> do
         putMVar sema ()
       takeMVar sema
+
+    it "correctly output to stdin" $ do
+      childProcess <- spawn "cat" [] "."
+      sema <- newEmptyMVar
+      streamOut <- stdout childProcess
+      onData streamOut $ \buffer ->
+        putMVar sema =<< toString buffer
+      streamIn <- stdin childProcess
+      streamIn `write` "hello"
+      value <- takeMVar sema
+      value `shouldBe` "hello"

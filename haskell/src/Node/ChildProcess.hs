@@ -32,6 +32,12 @@ foreign import javascript unsafe
   "$1.stdout" stdout :: ChildProcess -> IO Stream
 
 foreign import javascript unsafe
+  "$1.stdin" stdin :: ChildProcess -> IO Stream
+
+foreign import javascript unsafe
+  "$1.write($2)" write :: Stream -> JSString -> IO ()
+
+foreign import javascript unsafe
   "$1.on($2, $3)" js_on :: JSRef a -> JSString -> JSFun (JSRef b -> IO ()) -> IO ()
 
 type EventName = JSString
@@ -45,7 +51,7 @@ on stream eventName f = do
   js_on stream eventName callback
 
 onData :: Stream -> (Buffer -> IO ()) -> IO ()
-onData = (`on` toJSString "data") 
+onData = (`on` toJSString "data")
 
 data Err_
 type Err = JSRef Err_
