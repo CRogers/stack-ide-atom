@@ -28,3 +28,9 @@ spec = do
       line2 <- readLine childProcess
       line1 `shouldBe` "line one"
       line2 `shouldBe` "line two"
+
+    should "read a line after writing a line" $ do
+      childProcess <- spawn "cat" [] "."
+      writeLine childProcess "foobar"
+      line <- readLine childProcess
+      line `shouldBe` "foobar"

@@ -40,3 +40,8 @@ readLine :: ChildProcess -> IO Text
 readLine (ChildProcess childProcess lineBuffer sema) = do
   takeMVar sema
   atomicModifyIORef' lineBuffer (\(l:ls) -> (ls, l))
+
+writeLine :: ChildProcess -> Text -> IO ()
+writeLine (ChildProcess childProcess _ _) text = do
+  inStream <- CP.stdin childProcess
+  CP.write inStream (toJSString $ T.snoc text '\n')
