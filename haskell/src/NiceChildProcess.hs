@@ -3,8 +3,7 @@
 module NiceChildProcess where
 
 import Control.Applicative
-import Control.Concurrent.STM
-import Control.Concurrent.STM.TChan
+import Control.Concurrent.Chan
 import Control.Monad
 import Data.Monoid
 import Data.Text (Text)
@@ -20,7 +19,7 @@ type Arg = Text
 type Directory = Text
 
 type Line = Text
-type LineQueue = STM (TChan Line)
+type LineQueue = Chan Line
 
 data ChildProcess = ChildProcess CP.ChildProcess LineQueue
 
@@ -28,16 +27,16 @@ spawn :: Command -> [Arg] -> Directory -> IO ChildProcess
 spawn command args cwd = do
   childProcess <- CP.spawn (toJSString command) (map toJSString args) (toJSString cwd)
   outStream <- CP.stdout childProcess
-  let lineQueue = newTChan
+  lineQueue <- newChan
   CP.onData outStream $ \buffer -> do
     text <- fromJSString <$> CP.toString buffer
     let lines = T.lines text
-    void $ atomically $ traverse (\line -> writeTChan <$> lineQueue <*> pure line) lines
+    void $ traverse (writeChan lineQueue) lines
   return $ ChildProcess childProcess lineQueue
 
 readLine :: ChildProcess -> IO Text
 readLine (ChildProcess childProcess lineQueue) = do
-  atomically (readTChan =<< lineQueue)
+  readChan lineQueue
 
 writeLine :: ChildProcess -> Text -> IO ()
 writeLine (ChildProcess childProcess _) text = do
