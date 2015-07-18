@@ -29,7 +29,7 @@ spec = do
       childProcess <- spawn "echo" ["lel"] "."
       stream <- stdout childProcess
       sema <- newEmptyMVar
-      on stream "data" $ \buffer -> do
+      onData stream $ \buffer -> do
         str <- toString buffer
         putMVar sema str
       value <- takeMVar sema
@@ -39,7 +39,7 @@ spec = do
       childProcess <- spawn "pwd" [] "/etc"
       stream <- stdout childProcess
       sema <- newEmptyMVar
-      on stream "data" $ \buffer -> do
+      onData stream $ \buffer -> do
         str <- toString buffer
         putMVar sema str
       value <- takeMVar sema
@@ -49,7 +49,7 @@ spec = do
       childProcess <- spawn "cat" ["test-data/multiline-file"] "."
       stream <- stdout childProcess
       sema <- newEmptyMVar
-      on stream "data" $ \buffer -> do
+      onData stream $ \buffer -> do
         str <- toString buffer
         putMVar sema str
       value <- takeMVar sema

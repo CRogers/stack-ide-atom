@@ -44,6 +44,9 @@ on stream eventName f = do
   callback <- syncCallback1 AlwaysRetain False f
   js_on stream eventName callback
 
+onData :: Stream -> (Buffer -> IO ()) -> IO ()
+onData = (`on` toJSString "data") 
+
 data Err_
 type Err = JSRef Err_
 
