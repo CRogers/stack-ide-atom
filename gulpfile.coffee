@@ -50,3 +50,8 @@ gulp.task 'build', ['copy-generated-js'], shell.task([
 
 gulp.task 'watch-test', ->
   gulp.watch 'haskell/**/*.hs', ['test']
+
+gulp.task 'update-subtrees', shell.task([
+  'git subtree pull --squash --prefix=stack-ide https://github.com/commercialhaskell/stack-ide.git master'
+  'git subtree pull --squash --prefix=ide-backend https://github.com/fpco/ide-backend.git master'
+])
