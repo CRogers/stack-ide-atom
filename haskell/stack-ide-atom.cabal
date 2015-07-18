@@ -34,6 +34,7 @@ library
                      , ghcjs-base
                      , stack-ide-api
                      , text
+                     , stm
   hs-source-dirs:      src
   cpp-options:         -DGHCJS_BROWSER
   default-language:    Haskell2010
