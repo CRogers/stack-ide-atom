@@ -1,3 +1,2 @@
 packages: []
-resolver: lts-2.14
-extra-include-dirs: []
+resolver: nightly-2015-06-28

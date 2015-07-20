@@ -31,7 +31,7 @@ gulp.task 'build-stack-ide', shell.task([
 
 hspecLoc = 'dist/build/hspec/hspec'
 
-gulp.task 'test', ['build-haskell'], haskellCmds([
+gulp.task 'test', ['build-haskell', 'build-stack-ide'], haskellCmds([
   "echo 'function h$putenv(){}' >>#{hspecLoc}"
   "node #{hspecLoc}"
 ])
