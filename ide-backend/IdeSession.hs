@@ -102,8 +102,11 @@
 module IdeSession (
     -- * Configuration
     SessionConfig(..)
+  , sessionConfigFromEnv
   , defaultSessionConfig
   , InProcess
+  , ProgramSearchPath
+  , ProgramSearchPathEntry(..)
     -- * Updating the session
     -- ** Starting and stopping
   , IdeSession -- Abstract
