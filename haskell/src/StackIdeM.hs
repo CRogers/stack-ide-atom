@@ -1,4 +1,4 @@
-{-# LANGUAGE StandaloneDeriving, DeriveFunctor, TemplateHaskell, FlexibleContexts #-}
+{-# LANGUAGE DeriveFunctor, TemplateHaskell, FlexibleContexts #-}
 
 module StackIdeM (
   VersionInfo(..)
@@ -10,9 +10,6 @@ import Control.Monad.Free.TH (makeFree)
 import Data.Text (Text)
 
 import Stack.Ide.JsonAPI
-
-deriving instance Show VersionInfo
-deriving instance Eq VersionInfo
 
 type Directory = Text
 
