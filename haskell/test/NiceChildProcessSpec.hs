@@ -61,3 +61,14 @@ spec = do
       childProcess <- spawn "kasdhfskhdg" [] "."
       threadDelay 10000
       (writeLine childProcess "foo") `shouldThrow` anyException
+
+    should "throw an error twice when the executable can't be found and readLine is called twice" $ do
+      childProcess <- spawn "kasdhfskhdg" [] "."
+      (readLine childProcess) `shouldThrow` anyException
+      (readLine childProcess) `shouldThrow` anyException
+
+    should "throw an error twice when the executable can't be found and writeLine is called twice" $ do
+      childProcess <- spawn "kasdhfskhdg" [] "."
+      threadDelay 10000
+      (writeLine childProcess "foo") `shouldThrow` anyException
+      (writeLine childProcess "bar") `shouldThrow` anyException

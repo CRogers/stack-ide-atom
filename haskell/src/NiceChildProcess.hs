@@ -45,7 +45,7 @@ spawn command args cwd = do
 
 raceTo :: MVar Errored -> IO a -> IO a
 raceTo errored other = do
-  winner <- race (takeMVar errored) other
+  winner <- race (readMVar errored) other
   case winner of
     Left (Errored err) -> error $ show err
     Right value -> return value
@@ -56,7 +56,7 @@ readLine (ChildProcess childProcess errored lineQueue) = do
 
 writeLine :: ChildProcess -> Text -> IO ()
 writeLine (ChildProcess childProcess errored _) text = do
-  hadErrored <- tryTakeMVar errored
+  hadErrored <- tryReadMVar errored
   case hadErrored of
     Nothing -> return ()
     Just (Errored err) -> error $ show err
