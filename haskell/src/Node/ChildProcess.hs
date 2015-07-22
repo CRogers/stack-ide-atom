@@ -56,6 +56,9 @@ onData = (`on` toJSString "data")
 data Err_
 type Err = JSRef Err_
 
+foreign import javascript unsafe
+  "$1.message" errorMessage :: Err -> JSString
+
 onError :: ChildProcess -> (Err -> IO ()) -> IO ()
 onError childProcess f = do
   callback <- syncCallback1 AlwaysRetain False f

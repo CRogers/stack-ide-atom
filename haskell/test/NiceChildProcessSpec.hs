@@ -51,3 +51,7 @@ spec = do
       writeLine childProcess "bar"
       readLine childProcess >>= (`shouldBe` "foo")
       readLine childProcess >>= (`shouldBe` "bar")
+
+    should "throw an error when executable can't be found when trying to readline" $ do
+      childProcess <- spawn "kasdhfskhdg" [] "."
+      (readLine childProcess) `shouldThrow` anyException
