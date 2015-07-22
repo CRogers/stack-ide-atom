@@ -39,6 +39,8 @@ library
                      , ivar-simple
                      , async
                      , free
+                     , aeson
+                     , bytestring
   hs-source-dirs:      src
   cpp-options:         -DGHCJS_BROWSER
   default-language:    Haskell2010
