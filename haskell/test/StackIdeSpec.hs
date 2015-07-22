@@ -19,4 +19,5 @@ spec =
       let program = do
                     createSession "test-data/just-stack-yaml"
                     getVersion
-      void (runStackIde program :: IO VersionInfo)
+      versionInfo <- runStackIde program
+      versionInfo `shouldBe` VersionInfo 0 1 0
