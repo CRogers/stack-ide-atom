@@ -14,6 +14,14 @@ and text editors can talk to ide-backend with a JSON protocol.
 [stack](https://github.com/commercialhaskell/stack) is required to
 build ide-backend.  Once you have stack, run `stack install`.
 
+## Running the tests
+
+To run the tests, just do `stack test`.  This won't run a complete
+test, as it will only use your current GHC version, but that should be
+sufficient for most development.  We can leave it to
+[travis](https://travis-ci.org/fpco/ide-backend) to try multiple GHC
+versions.
+
 ## Hello World
 
 The following simple example demonstrates basic usage of ide-backend.
@@ -27,7 +35,9 @@ import           IdeSession
 main :: IO ()
 main = do
     -- Initialization and providing some code
-    sess <- initSession defaultSessionInitParams defaultSessionConfig
+    config <- sessionConfigFromEnv
+    sess <- initSession defaultSessionInitParams config
+        { configLocalWorkingDir = Nothing }
     let upd = updateSourceFile "Main.hs" "main = putStrLn \"Hello World\""
            <> updateCodeGeneration True
            <> updateGhcOpts ["-Wall"]
@@ -61,7 +71,8 @@ main = do
     print $ autoCompletion "Main" "putS"
 ```
 
-Sample output for this run:
+To run this, use `stack runghc example.hs`. The output should look
+something like:
 
 ```
 [1 of 1] Compiling Main
