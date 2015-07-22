@@ -15,7 +15,7 @@ xshould _ _ = return ()
 spec :: Spec
 spec =
   describe "StackIde should" $ do
-    xshould "respond with the version when starting up" $ do
+    should "respond with the version when starting up" $ do
       let program = do
                     createSession "test-data/just-stack-yaml"
                     getVersion
