@@ -3,8 +3,12 @@
 module NiceChildProcess where
 
 import Control.Applicative
+import Control.Concurrent.Async
 import Control.Concurrent.Chan
+import Control.Concurrent.MVar
 import Control.Monad
+import Data.IVar.Simple (IVar)
+import qualified Data.IVar.Simple as IVar
 import Data.Monoid
 import Data.Text (Text)
 import qualified Data.Text as T
@@ -18,32 +22,44 @@ type Command = Text
 type Arg = Text
 type Directory = Text
 
-data Line = Line Text | Error Text
+type Line = Text
 type LineQueue = Chan Line
 
-data ChildProcess = ChildProcess CP.ChildProcess LineQueue
+newtype Errored = Errored Text
+
+data ChildProcess = ChildProcess CP.ChildProcess (MVar Errored) LineQueue
 
 spawn :: Command -> [Arg] -> Directory -> IO ChildProcess
 spawn command args cwd = do
   childProcess <- CP.spawn (toJSString command) (map toJSString args) (toJSString cwd)
-  lineQueue <- newChan
-  CP.onError childProcess $ \err -> do
-    writeChan lineQueue (Error $ fromJSString (CP.errorMessage err))
+  errored <- newEmptyMVar
+  CP.onError childProcess $ \err ->
+    putMVar errored (Errored $ fromJSString (CP.errorMessage err))
   outStream <- CP.stdout childProcess
+  lineQueue <- newChan
   CP.onData outStream $ \buffer -> do
     text <- fromJSString <$> CP.toString buffer
     let lines = T.lines text
-    void $ traverse (writeChan lineQueue . Line) lines
-  return $ ChildProcess childProcess lineQueue
+    void $ traverse (writeChan lineQueue) lines
+  return $ ChildProcess childProcess errored lineQueue
+
+raceTo :: MVar Errored -> IO a -> IO a
+raceTo errored other = do
+  winner <- race (takeMVar errored) other
+  case winner of
+    Left (Errored err) -> error $ show err
+    Right value -> return value
 
 readLine :: ChildProcess -> IO Text
-readLine (ChildProcess childProcess lineQueue) = do
-  line <- readChan lineQueue
-  case line of
-    Error msg -> error (show msg)
-    Line text -> return text
+readLine (ChildProcess childProcess errored lineQueue) = do
+  raceTo errored (readChan lineQueue)
 
 writeLine :: ChildProcess -> Text -> IO ()
-writeLine (ChildProcess childProcess _) text = do
+writeLine (ChildProcess childProcess errored _) text = do
+  hadErrored <- tryTakeMVar errored
+  case hadErrored of
+    Nothing -> return ()
+    Just (Errored err) -> error $ show err
+
   inStream <- CP.stdin childProcess
   CP.write inStream (toJSString $ T.snoc text '\n')

@@ -2,6 +2,7 @@ module NiceChildProcessSpec where
 
 import Test.Hspec
 
+import Control.Concurrent
 import GHCJS.Types
 
 import NiceChildProcess
@@ -52,6 +53,11 @@ spec = do
       readLine childProcess >>= (`shouldBe` "foo")
       readLine childProcess >>= (`shouldBe` "bar")
 
-    should "throw an error when executable can't be found when trying to readline" $ do
+    should "throw an error when executable can't be found when trying to readLine" $ do
       childProcess <- spawn "kasdhfskhdg" [] "."
       (readLine childProcess) `shouldThrow` anyException
+
+    should "throw an error when executable can't be found when trying to writeLine" $ do
+      childProcess <- spawn "kasdhfskhdg" [] "."
+      threadDelay 10000
+      (writeLine childProcess "foo") `shouldThrow` anyException

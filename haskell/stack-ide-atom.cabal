@@ -36,6 +36,8 @@ library
                      , ghcjs-base
                      , stack-ide-api
                      , text
+                     , ivar-simple
+                     , async
                      , free
   hs-source-dirs:      src
   cpp-options:         -DGHCJS_BROWSER

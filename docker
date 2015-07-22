@@ -5,4 +5,4 @@ if [ $# = 0 ]; then
   INTERACTIVE="-i"
 fi
 
-docker run -t "$INTERACTIVE" --rm -v "$(pwd):/blah" -v "$(pwd)/.docker-stack:/root/.stack/snapshots" crogers/stack-ide-atom-docker:stack-0.1.2.0_nightly-2015-06-28 "$@"
+docker run -t "$INTERACTIVE" --rm -v "$(pwd):/blah" -v "$(pwd)/.docker-stack:/root/.stack/snapshots" crogers/stack-ide-atom-docker:stack-0.1.2.0_nightly-2015-06-28 $@
