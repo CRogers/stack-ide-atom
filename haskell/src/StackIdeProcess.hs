@@ -1,6 +1,6 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, RecordWildCards #-}
 
-module StackIdeProcess (StackIdeProcess(..), createStackProcess, createFromChildProcess) where
+module StackIdeProcess (StackIdeProcess(..), createStackIdeProcess, createFromChildProcess, command) where
 
 import Control.Applicative
 import Data.Aeson (decode, encode)
@@ -16,8 +16,13 @@ data StackIdeProcess = StackIdeProcess {
   awaitResponse :: IO Response
 }
 
-createStackProcess :: Text -> IO StackIdeProcess
-createStackProcess directory = do
+command :: StackIdeProcess -> Request -> IO Response
+command StackIdeProcess{..} req = do
+  request req
+  awaitResponse
+
+createStackIdeProcess :: Text -> IO StackIdeProcess
+createStackIdeProcess directory = do
   createFromChildProcess <$> spawn "stack" ["ide"] directory
 
 createFromChildProcess :: ChildProcess -> StackIdeProcess

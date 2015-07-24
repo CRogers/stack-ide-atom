@@ -1,8 +1,14 @@
-module UpdateSkippingStackIdeProcess (StackIdeProcess(..), createFromStackIdeProcess) where
+module UpdateSkippingStackIdeProcess (StackIdeProcess(..), createUpdateSkippingStackIdeProcess, createFromStackIdeProcess) where
 
+import Control.Applicative
+import Data.Text (Text)
 import Stack.Ide.JsonAPI
 
 import StackIdeProcess
+
+createUpdateSkippingStackIdeProcess :: Text -> IO StackIdeProcess
+createUpdateSkippingStackIdeProcess directory =
+  createFromStackIdeProcess <$> createStackIdeProcess directory
 
 createFromStackIdeProcess :: StackIdeProcess -> StackIdeProcess
 createFromStackIdeProcess stackIdeProcess =

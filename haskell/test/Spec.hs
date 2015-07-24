@@ -14,4 +14,4 @@ main = hspec $ do
   NCPS.spec
   SIPS.spec
   USSIPS.spec
---  SIS.spec
+  SIS.spec

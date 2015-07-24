@@ -16,7 +16,7 @@ xshould _ _ = return ()
 
 spec :: Spec
 spec =
-  describe "StackIdeProcess should" $ do
+  describe "UpdateSkippingStackIdeProcess should" $ do
     should "pass through RequestGetSourceErrors command" $ do
       requested <- newEmptyMVar
       let stackIdeProcess = StackIdeProcess (putMVar requested) (return undefined)

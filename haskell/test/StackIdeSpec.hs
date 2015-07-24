@@ -5,6 +5,7 @@ module StackIdeSpec where
 import Test.Hspec
 
 import Control.Monad
+import IdeSession.Types.Public
 
 import StackIdeM
 import StackIde
@@ -28,3 +29,5 @@ spec =
                     getSourceErrors
       sourceErrors <- runStackIde program
       length sourceErrors `shouldBe` 1
+      let sourceError = head sourceErrors
+      errorSpan sourceError `shouldBe` ProperSpan (SourceSpan "OneSourceError.hs" 4 8 4 9)

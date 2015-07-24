@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, RecordWildCards #-}
 
 module StackIde where
 
@@ -12,24 +12,24 @@ import Data.Text.Encoding (encodeUtf8, decodeUtf8)
 import Stack.Ide.JsonAPI
 
 import StackIdeM
-import NiceChildProcess
+import StackIdeProcess
+import UpdateSkippingStackIdeProcess
 
-data State = State (MVar ChildProcess) (MVar VersionInfo)
+data State = State (MVar StackIdeProcess) (MVar VersionInfo)
 
 runStackIde :: StackIdeM a -> IO a
 runStackIde stackIde = do
   version <- newEmptyMVar
-  childProcess <- newEmptyMVar
-  iterM (run $ State childProcess version) stackIde
+  stackIdeProcess <- newEmptyMVar
+  iterM (run $ State stackIdeProcess version) stackIde
 
   where
     run :: State -> StackIde (IO a) -> IO a
-    run (State childProcessStore version) stackIde = case stackIde of
+    run (State stackIdeProcessStore version) stackIde = case stackIde of
       CreateSession directory next -> do
-        childProcess <- spawn "stack" ["ide"] directory
-        putMVar childProcessStore childProcess
-        welcomeRepsonseStr <- readLine childProcess
-        let (Just (ResponseWelcome versionInfo)) = decode (fromStrict $ encodeUtf8 welcomeRepsonseStr)
+        stackIdeProcess <- createUpdateSkippingStackIdeProcess directory
+        putMVar stackIdeProcessStore stackIdeProcess
+        (ResponseWelcome versionInfo) <- awaitResponse stackIdeProcess
         putMVar version versionInfo
         next
 
@@ -37,8 +37,6 @@ runStackIde stackIde = do
         f =<< readMVar version
 
       GetSourceErrors f -> do
-        childProcess <- readMVar childProcessStore
-        writeLine childProcess (decodeUtf8 (toStrict (encode RequestGetSourceErrors)))
-        sourceErrorsStr <- readLine childProcess
-        let (Just sourceErrors) = decode (fromStrict $ encodeUtf8 sourceErrorsStr)
+        stackIdeProcess <- readMVar stackIdeProcessStore
+        (ResponseGetSourceErrors sourceErrors) <- command stackIdeProcess RequestGetSourceErrors
         f sourceErrors
