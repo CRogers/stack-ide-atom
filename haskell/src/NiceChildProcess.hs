@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module NiceChildProcess where
+module NiceChildProcess (ChildProcess(..), spawn) where
 
 import Control.Applicative
 import Control.Concurrent.Async
@@ -27,7 +27,12 @@ type LineQueue = Chan Line
 
 newtype Errored = Errored Text
 
-data ChildProcess = ChildProcess CP.ChildProcess (MVar Errored) LineQueue
+data ChildProcess = ChildProcess {
+  readLine :: IO Text,
+  writeLine :: Text -> IO ()
+}
+
+data ChildProcessData = ChildProcessData CP.ChildProcess (MVar Errored) LineQueue
 
 spawn :: Command -> [Arg] -> Directory -> IO ChildProcess
 spawn command args cwd = do
@@ -41,7 +46,8 @@ spawn command args cwd = do
     text <- fromJSString <$> CP.toString buffer
     let lines = T.lines text
     void $ traverse (writeChan lineQueue) lines
-  return $ ChildProcess childProcess errored lineQueue
+  let childProcessData = ChildProcessData childProcess errored lineQueue
+  return $ ChildProcess (makeReadLine childProcessData) (makeWriteLine childProcessData)
 
 raceTo :: MVar Errored -> IO a -> IO a
 raceTo errored other = do
@@ -50,12 +56,12 @@ raceTo errored other = do
     Left (Errored err) -> error $ show err
     Right value -> return value
 
-readLine :: ChildProcess -> IO Text
-readLine (ChildProcess childProcess errored lineQueue) = do
+makeReadLine :: ChildProcessData -> IO Text
+makeReadLine (ChildProcessData childProcess errored lineQueue) = do
   raceTo errored (readChan lineQueue)
 
-writeLine :: ChildProcess -> Text -> IO ()
-writeLine (ChildProcess childProcess errored _) text = do
+makeWriteLine :: ChildProcessData -> Text -> IO ()
+makeWriteLine (ChildProcessData childProcess errored _) text = do
   hadErrored <- tryReadMVar errored
   case hadErrored of
     Nothing -> return ()
