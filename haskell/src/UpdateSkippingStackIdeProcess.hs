@@ -12,4 +12,4 @@ makeRequest :: StackIdeProcess -> Request -> IO ()
 makeRequest = request
 
 makeAwaitResponse :: StackIdeProcess -> IO Response
-makeAwaitResponse = undefined
+makeAwaitResponse = awaitResponse
