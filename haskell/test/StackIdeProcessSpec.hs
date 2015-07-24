@@ -23,3 +23,9 @@ spec =
       let stackIdeProcess = createFromChildProcess childProcess
       request stackIdeProcess RequestGetSourceErrors
       takeMVar written >>= (`shouldBe` "{\"tag\":\"RequestGetSourceErrors\",\"contents\":[]}")
+
+    should "correctly deserialise a ResponseWelcome" $ do
+      let welcome = "{\"tag\":\"ResponseWelcome\",\"contents\":[0,1,0]}"
+      let childProcess = ChildProcess (return welcome) (\_ -> return ())
+      let stackIdeProcess = createFromChildProcess childProcess
+      awaitResponse stackIdeProcess >>= (`shouldBe` ResponseWelcome (VersionInfo 0 1 0))
