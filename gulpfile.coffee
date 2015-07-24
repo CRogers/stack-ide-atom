@@ -12,12 +12,12 @@ gulp.task 'create-sandbox', haskellCmds([
   'cabal sandbox add-source ../stack-ide/stack-ide-api'
 ])
 
-gulp.task 'install-deps', haskellCmds([
+gulp.task 'install-deps', ['create-sandbox'], haskellCmds([
   'cabal update'
   'cabal install --only-dependencies --enable-tests --ghcjs'
 ])
 
-gulp.task 'configure-haskell', haskellCmds([
+gulp.task 'configure-haskell', ['install-deps'], haskellCmds([
   'cabal configure --enable-tests --ghcjs'
 ])
 
@@ -31,7 +31,7 @@ gulp.task 'build-stack-ide', shell.task([
 
 hspecLoc = 'dist/build/hspec/hspec'
 
-gulp.task 'test', ['build-haskell'], haskellCmds([
+gulp.task 'test', ['build-haskell', 'build-stack-ide'], haskellCmds([
   "echo 'function h$putenv(){}' >>#{hspecLoc}"
   "node #{hspecLoc}"
 ])
@@ -55,3 +55,5 @@ gulp.task 'update-subtrees', shell.task([
   'git subtree pull --squash --prefix=stack-ide https://github.com/commercialhaskell/stack-ide.git master'
   'git subtree pull --squash --prefix=ide-backend https://github.com/fpco/ide-backend.git master'
 ])
+
+gulp.task 'circleci', ['test']
