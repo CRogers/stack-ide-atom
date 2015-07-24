@@ -13,4 +13,5 @@ dependencies:
 
 test:
   override:
+    - npm install
     - ./docker-gulp test
