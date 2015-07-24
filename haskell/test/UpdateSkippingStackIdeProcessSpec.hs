@@ -35,3 +35,11 @@ spec =
       let stackIdeProcess = StackIdeProcess (const $ return ()) (readChan responses)
       let updateSkipping = createFromStackIdeProcess stackIdeProcess
       awaitResponse updateSkipping >>= (`shouldBe` ResponseShutdownSession)
+
+    should "pass back only a ResponseShutdownSession with an UpdateSession, UpdateSession, ShutdownSession" $ do
+      responses <- newChan
+      let updateSession = ResponseUpdateSession undefined
+      writeList2Chan responses [updateSession, updateSession, ResponseShutdownSession]
+      let stackIdeProcess = StackIdeProcess (const $ return ()) (readChan responses)
+      let updateSkipping = createFromStackIdeProcess stackIdeProcess
+      awaitResponse updateSkipping >>= (`shouldBe` ResponseShutdownSession)
