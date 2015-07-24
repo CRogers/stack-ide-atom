@@ -4,6 +4,7 @@ module UpdateSkippingStackIdeProcessSpec where
 
 import Test.Hspec
 
+import Control.Concurrent.Chan
 import Control.Concurrent.MVar
 import Control.Monad
 import Stack.Ide.JsonAPI
@@ -25,5 +26,12 @@ spec =
 
     should "pass back a ResponseShutdownSession" $ do
       let stackIdeProcess = StackIdeProcess (const $ return ()) (return ResponseShutdownSession)
+      let updateSkipping = createFromStackIdeProcess stackIdeProcess
+      awaitResponse updateSkipping >>= (`shouldBe` ResponseShutdownSession)
+
+    should "pass back only a ResponseShutdownSession with an UpdateSession then ShutdownSession" $ do
+      responses <- newChan
+      writeList2Chan responses [ResponseUpdateSession undefined, ResponseShutdownSession]
+      let stackIdeProcess = StackIdeProcess (const $ return ()) (readChan responses)
       let updateSkipping = createFromStackIdeProcess stackIdeProcess
       awaitResponse updateSkipping >>= (`shouldBe` ResponseShutdownSession)

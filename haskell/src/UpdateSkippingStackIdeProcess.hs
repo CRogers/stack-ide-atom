@@ -12,4 +12,8 @@ makeRequest :: StackIdeProcess -> Request -> IO ()
 makeRequest = request
 
 makeAwaitResponse :: StackIdeProcess -> IO Response
-makeAwaitResponse = awaitResponse
+makeAwaitResponse stackIdeProcess = do
+  response <- awaitResponse stackIdeProcess
+  case response of
+    ResponseUpdateSession _ -> makeAwaitResponse stackIdeProcess
+    res -> return res
