@@ -6,10 +6,7 @@ import StackIdeProcess
 
 createFromStackIdeProcess :: StackIdeProcess -> StackIdeProcess
 createFromStackIdeProcess stackIdeProcess =
-  StackIdeProcess (makeRequest stackIdeProcess) (makeAwaitResponse stackIdeProcess)
-
-makeRequest :: StackIdeProcess -> Request -> IO ()
-makeRequest = request
+  StackIdeProcess (request stackIdeProcess) (makeAwaitResponse stackIdeProcess)
 
 makeAwaitResponse :: StackIdeProcess -> IO Response
 makeAwaitResponse stackIdeProcess = do
