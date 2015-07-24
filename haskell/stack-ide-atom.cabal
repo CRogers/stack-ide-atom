@@ -30,6 +30,7 @@ library
                      , StackIdeM
                      , StackIde
                      , StackIdeProcess
+                     , UpdateSkippingStackIdeProcess
                      , GhcjsExtras
   -- other-modules:
   -- other-extensions:
