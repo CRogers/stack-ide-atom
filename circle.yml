@@ -2,6 +2,13 @@ machine:
   services:
     - docker
 
+dependencies:
+  cache_directories:
+    - "~/docker"
+
+  override:
+    - bash circleci-docker-cache.sh
+
 test:
   override:
     - ./docker-gulp test
