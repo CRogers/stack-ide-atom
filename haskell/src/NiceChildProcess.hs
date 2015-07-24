@@ -7,8 +7,6 @@ import Control.Concurrent.Async
 import Control.Concurrent.Chan
 import Control.Concurrent.MVar
 import Control.Monad
-import Data.IVar.Simple (IVar)
-import qualified Data.IVar.Simple as IVar
 import Data.Monoid
 import Data.Text (Text)
 import qualified Data.Text as T

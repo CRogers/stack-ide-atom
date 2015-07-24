@@ -39,7 +39,6 @@ library
                      , stack-ide-api
                      , ide-backend-common
                      , text
-                     , ivar-simple
                      , async
                      , free
                      , aeson
