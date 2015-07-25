@@ -60,4 +60,4 @@ test-suite hspec
                      , ide-backend-common
   cpp-options:         -DGHCJS_BROWSER
   default-language:    Haskell2010
-  extensions:          OverloadedStrings
+  default-extensions:  OverloadedStrings
