@@ -4,9 +4,6 @@
   "version": "0.1.0",
   "description": "A short description of your package",
   "keywords": [],
-  "activationCommands": {
-    "atom-workspace": "stack-ide-atom:toggle"
-  },
   "repository": "https://github.com/atom/stack-ide-atom",
   "license": "MIT",
   "engines": {
