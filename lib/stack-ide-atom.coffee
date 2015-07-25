@@ -17,7 +17,8 @@ module.exports = AtomStackIde =
     @subscriptions = new CompositeDisposable
 
     # Register command that toggles this view
-    @subscriptions.add atom.commands.add 'atom-workspace', 'stack-ide-atom:toggle': => @toggle()
+    @subscriptions.add atom.commands.add 'atom-text-editor',
+      'stack-ide-atom:source-errors': ->
 
   deactivate: ->
     @modalPanel.destroy()
