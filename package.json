@@ -14,7 +14,8 @@
     "coffee-script": "*",
     "del": "*",
     "gulp": "*",
-    "gulp-shell": "*"
+    "gulp-shell": "*",
+    "lodash": "*"
   },
   "scripts": {
     "shrinkwrap": "npm shrinkwrap --dev && node ./tasks/shrinkwrap-remove-resolved.js"
