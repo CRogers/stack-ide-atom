@@ -1,3 +1,4 @@
+Atom = require('atom')
 AtomStackIde = require '../lib/stack-ide-atom'
 _ = require 'lodash'
 
@@ -35,9 +36,16 @@ describe "AtomStackIde", ->
         textEditorElement = atom.views.getView(textEditor)
         atom.commands.dispatch(textEditorElement, 'stack-ide-atom:source-errors')
 
+      decorations = null
+
       waitsFor ->
         decorations = _.filter textEditor.getDecorations(), (decoration) ->
           decoration.properties.type == 'highlight' and
           decoration.properties.class == 'sia-error'
 
         return decorations.length > 0
+
+      runs ->
+        expect(decorations.length).toBe 1
+        correctRange = decorations[0].getMarker().getBufferRange().isEqual(new Atom.Range([3,7], [3,8]))
+        expect(correctRange).toBe true
