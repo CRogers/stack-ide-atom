@@ -2,7 +2,8 @@ AtomStackIdeView = require './stack-ide-atom-view'
 {CompositeDisposable} = require 'atom'
 
 haskell = require('./haskell/generated/haskell')
-haskell.main()
+p = haskell.getPackage()
+console.log p
 
 module.exports = AtomStackIde =
   atomStackIdeView: null
@@ -18,7 +19,9 @@ module.exports = AtomStackIde =
 
     # Register command that toggles this view
     @subscriptions.add atom.commands.add 'atom-text-editor',
-      'stack-ide-atom:source-errors': ->
+      'stack-ide-atom:source-errors': (event) ->
+        editor = @getModel()
+        console.log editor.getText()
 
   deactivate: ->
     @modalPanel.destroy()

@@ -26,9 +26,11 @@ executable stack-ide-atom
 
 library
   exposed-modules:     Node.ChildProcess
+                     , Atom.Package
                      , NiceChildProcess
                      , StackIdeM
                      , StackIde
+                     , StackIdePackage
                      , StackIdeProcess
                      , UpdateSkippingStackIdeProcess
                      , GhcjsExtras

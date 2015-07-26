@@ -33,8 +33,8 @@ describe "AtomStackIde", ->
 
       runs ->
         textEditorElement = atom.views.getView(textEditor)
-        atom.commands.dispatch(textEditorElement, 'atom-stack-ide:source-errors')
+        atom.commands.dispatch(textEditorElement, 'stack-ide-atom:source-errors')
         decorations = _.filter textEditor.getDecorations(), (decoration) ->
           decoration.properties.type == 'hightlight' and
-          decoration.properties.class == 'asi-error'
+          decoration.properties.class == 'sia-error'
         expect(decorations.length).toBe 1
