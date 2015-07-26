@@ -7,6 +7,7 @@ import GHCJS.Prim (toJSInt)
 import GHCJS.Types
 
 import Atom.Marker
+import Atom.Decoration
 
 data TextEditor_
 type TextEditor = JSRef TextEditor_
@@ -32,3 +33,13 @@ rangeBetween sx sy ex ey = do
 
 foreign import javascript unsafe
   "$1.markBufferRange($2)" markBufferRange :: TextEditor -> Range -> IO Marker
+
+foreign import javascript unsafe
+  "$1.decorateMarker($2, {type: 'highlight', class: $3})"
+  js_decorateMarker :: TextEditor -> Marker -> JSString -> IO JSDecoration
+
+type ClassName = Text
+
+decorateMarker :: TextEditor -> Marker -> ClassName -> IO Decoration
+decorateMarker editor marker className =
+  fromJSDecoration <$> js_decorateMarker editor marker (toJSString className)

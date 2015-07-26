@@ -3,6 +3,7 @@
 module StackIdePackage where
 
 import Atom.CommandRegistry
+import Atom.Decoration
 import Atom.Package
 import Atom.TextEditor
 import Control.Monad
@@ -32,4 +33,6 @@ onActivate = do
     let range = rangeBetween sx sy ex ey
     marker <- markBufferRange editor range
     consoleLog marker
+    decoration <- decorateMarker editor marker "sia-error"
+    consoleLog $ jsDecoration decoration
   putStrLn "hi"

@@ -37,7 +37,7 @@ describe "AtomStackIde", ->
 
       waitsFor ->
         decorations = _.filter textEditor.getDecorations(), (decoration) ->
-          decoration.properties.type == 'hightlight' and
+          decoration.properties.type == 'highlight' and
           decoration.properties.class == 'sia-error'
 
         return decorations.length > 0
