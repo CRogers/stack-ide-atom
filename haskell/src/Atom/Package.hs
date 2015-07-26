@@ -11,9 +11,6 @@ data Package = Package {
 data JSPackage_
 type JSPackage = JSRef JSPackage_
 
-foreign import javascript unsafe
-  "console.log($1)" consoleLog :: JSRef a -> IO ()
-
 runPackage :: Package -> IO JSPackage
 runPackage package = do
   obj <- newObj
