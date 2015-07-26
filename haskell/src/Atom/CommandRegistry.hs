@@ -21,5 +21,5 @@ addCommand target commandName action = do
   let wrappedAction event = do
                               path <- js_getPath event
                               action (fromJSString path)
-  callback <- syncCallback1 AlwaysRetain False wrappedAction
+  callback <- asyncCallback1 AlwaysRetain wrappedAction
   js_addCommand (toJSString target) (toJSString commandName) callback

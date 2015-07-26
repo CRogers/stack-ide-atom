@@ -7,6 +7,7 @@ import Control.Concurrent.Async
 import Control.Concurrent.Chan
 import Control.Concurrent.MVar
 import Control.Monad
+import Debug.Trace
 import Data.Monoid
 import Data.Text (Text)
 import qualified Data.Text as T
@@ -56,10 +57,12 @@ raceTo errored other = do
 
 makeReadLine :: ChildProcessData -> IO Text
 makeReadLine (ChildProcessData childProcess errored lineQueue) = do
-  raceTo errored (readChan lineQueue)
+  line <- raceTo errored (readChan lineQueue)
+  traceShow line (return line)
 
 makeWriteLine :: ChildProcessData -> Text -> IO ()
 makeWriteLine (ChildProcessData childProcess errored _) text = do
+  traceShow text (return ())
   hadErrored <- tryReadMVar errored
   case hadErrored of
     Nothing -> return ()

@@ -34,7 +34,10 @@ describe "AtomStackIde", ->
       runs ->
         textEditorElement = atom.views.getView(textEditor)
         atom.commands.dispatch(textEditorElement, 'stack-ide-atom:source-errors')
+
+      waitsFor ->
         decorations = _.filter textEditor.getDecorations(), (decoration) ->
           decoration.properties.type == 'hightlight' and
           decoration.properties.class == 'sia-error'
-        expect(decorations.length).toBe 1
+
+        return decorations.length > 0
