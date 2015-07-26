@@ -1,5 +1,6 @@
 {Range} = require('atom')
 _ = require 'lodash'
+process = require 'process'
 
 # Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.
 #
@@ -70,4 +71,18 @@ describe 'AtomStackIde', ->
       dispatchSourceErrorsCommand()
       waitForDecorations(0)
 
+    describe 'Error Handling', ->
+      PATH = null
+      beforeEach ->
+        PATH = process.env.PATH
+
+      afterEach ->
+        process.env.PATH = PATH
+
+      it 'should put up an error if the path does not contain the stack executable', ->
+        process.env.PATH = ''
+        dispatchSourceErrorsCommand()
+
+        waitsFor ->
+          return atom.notifications.getNotifications().length == 1
 

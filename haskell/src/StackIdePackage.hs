@@ -7,14 +7,25 @@ import Atom.Decoration
 import Atom.Marker
 import Atom.Package
 import Atom.TextEditor
+import Control.Exception
 import Control.Monad
 import Data.IORef
 import qualified Data.Text as T
+import GHCJS.Foreign
+import GHCJS.Types
 import GHCJS.Utils
 import IdeSession.Types.Public
 
 import StackIde
 import StackIdeM
+
+foreign import javascript unsafe
+  "atom.notifications.addError($1)" addError :: JSString -> IO ()
+
+wrap :: IO () -> IO ()
+wrap expr = catch expr handle
+  where
+    handle ex = addError (toJSString (show (ex :: SomeException)))
 
 stackIdePackage :: Package
 stackIdePackage = Package {
@@ -28,7 +39,7 @@ onActivate :: IO ()
 onActivate = do
   markerRef <- newIORef Nothing
 
-  addCommand "atom-text-editor" "stack-ide-atom:source-errors" $ \editor -> do
+  addCommand "atom-text-editor" "stack-ide-atom:source-errors" $ \editor -> wrap $ do
     path <- getPath editor
     let dir = T.dropWhileEnd (/= '/') path
     print dir
