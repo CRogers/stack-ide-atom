@@ -13,6 +13,9 @@ xshould _ _ = return ()
 repeater :: IO ChildProcess
 repeater = spawn "cat" [] "."
 
+niceProcessException :: Selector NiceChildProcessException
+niceProcessException = const True
+
 spec :: Spec
 spec = do
   describe "NiceChildProcess should" $ do
@@ -55,20 +58,20 @@ spec = do
 
     should "throw an error when executable can't be found when trying to readLine" $ do
       childProcess <- spawn "kasdhfskhdg" [] "."
-      (readLine childProcess) `shouldThrow` anyException
+      (readLine childProcess) `shouldThrow` niceProcessException
 
     should "throw an error when executable can't be found when trying to writeLine" $ do
       childProcess <- spawn "kasdhfskhdg" [] "."
       threadDelay 10000
-      (writeLine childProcess "foo") `shouldThrow` anyException
+      (writeLine childProcess "foo") `shouldThrow` niceProcessException
 
     should "throw an error twice when the executable can't be found and readLine is called twice" $ do
       childProcess <- spawn "kasdhfskhdg" [] "."
-      (readLine childProcess) `shouldThrow` anyException
-      (readLine childProcess) `shouldThrow` anyException
+      (readLine childProcess) `shouldThrow` niceProcessException
+      (readLine childProcess) `shouldThrow` niceProcessException
 
     should "throw an error twice when the executable can't be found and writeLine is called twice" $ do
       childProcess <- spawn "kasdhfskhdg" [] "."
       threadDelay 10000
-      (writeLine childProcess "foo") `shouldThrow` anyException
-      (writeLine childProcess "bar") `shouldThrow` anyException
+      (writeLine childProcess "foo") `shouldThrow` niceProcessException
+      (writeLine childProcess "bar") `shouldThrow` niceProcessException
