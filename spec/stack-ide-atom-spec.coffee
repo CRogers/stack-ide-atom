@@ -28,6 +28,11 @@ describe 'AtomStackIde', ->
     runs ->
       textEditorElement = atom.views.getView(textEditor)
 
+  afterEach ->
+    for x in [0..100]
+      textEditor.undo()
+    textEditor.save()
+
   dispatchSourceErrorsCommand = ->
     runs ->
       atom.commands.dispatch(textEditorElement, 'stack-ide-atom:source-errors')
@@ -59,8 +64,8 @@ describe 'AtomStackIde', ->
       waitForDecorations(1)
 
       runs ->
-        textEditor.setTextInRange(initialErrorRange, '"foo"')
-        console.log textEditor.getText()
+        textEditor.setTextInBufferRange(initialErrorRange, '"foo"')
+        textEditor.save()
 
       dispatchSourceErrorsCommand()
       waitForDecorations(0)
