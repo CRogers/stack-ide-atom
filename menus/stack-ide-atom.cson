@@ -2,8 +2,8 @@
 'context-menu':
   'atom-text-editor': [
     {
-      'label': 'Toggle stack-ide-atom'
-      'command': 'stack-ide-atom:toggle'
+      'label': 'Get Source Errors'
+      'command': 'stack-ide-atom:source-errors'
     }
   ]
 'menu': [
@@ -13,8 +13,8 @@
       'label': 'stack-ide-atom'
       'submenu': [
         {
-          'label': 'Toggle'
-          'command': 'stack-ide-atom:toggle'
+          'label': 'Get Source Errors'
+          'command': 'stack-ide-atom:source-errors'
         }
       ]
     ]
