@@ -32,7 +32,8 @@ rangeBetween sx sy ex ey = do
   js_rangeBetween (toJSInt sx) (toJSInt sy) (toJSInt ex) (toJSInt ey)
 
 foreign import javascript unsafe
-  "$1.markBufferRange($2)" markBufferRange :: TextEditor -> Range -> IO Marker
+  "$1.markBufferRange($2, {invalidate: 'never'})"
+  markBufferRange :: TextEditor -> Range -> IO Marker
 
 foreign import javascript unsafe
   "$1.decorateMarker($2, {type: 'highlight', class: $3})"

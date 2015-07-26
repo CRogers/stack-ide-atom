@@ -57,3 +57,7 @@ gulp.task 'update-subtrees', shell.task([
 ])
 
 gulp.task 'circleci', ['test']
+
+gulp.task 'clear-sessions', haskellCmds([
+  'rm -r test-data/*/session.*'
+])

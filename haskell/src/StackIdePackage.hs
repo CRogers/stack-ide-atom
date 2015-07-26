@@ -30,7 +30,7 @@ onActivate = do
       getSourceErrors
     print sourceErrors
     let (SourceError _ (ProperSpan (SourceSpan _ sx sy ex ey)) _) = head sourceErrors
-    let range = rangeBetween sx sy ex ey
+    let range = rangeBetween (sx - 1) (sy - 1) (ex - 1) (ey - 1)
     marker <- markBufferRange editor range
     consoleLog marker
     decoration <- decorateMarker editor marker "sia-error"
