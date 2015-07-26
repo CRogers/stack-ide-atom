@@ -38,6 +38,7 @@ library
   -- other-extensions:
   build-depends:       base >=4.7 && <4.8
                      , ghcjs-base
+                     , ghcjs-prim
                      , stack-ide-api
                      , ide-backend-common
                      , text
