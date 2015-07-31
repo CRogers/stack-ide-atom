@@ -8,7 +8,7 @@ process = require 'process'
 # or `fdescribe`). Remove the `f` to unfocus the block.
 
 describe 'AtomStackIde', ->
-  [workspaceElement, activationPromise, oneSourceErrorPath, textEditor, textEditorElement] = []
+  [workspaceElement, activationPromise, textEditor, textEditorElement] = []
 
   beforeEach ->
     workspaceElement = atom.views.getView(atom.workspace)
@@ -17,22 +17,31 @@ describe 'AtomStackIde', ->
     waitsForPromise ->
       activationPromise
 
+  afterEach ->
+    for x in [0..100]
+      textEditor.undo()
+    textEditor.save()
+
+  loadProject = (projectPath, file) ->
+    absoluteProjectPath = null
+
     runs ->
       packagePath = atom.packages.getLoadedPackage('stack-ide-atom').path
-      oneSourceErrorPath = "#{packagePath}/haskell/test-data/one-source-error"
-      atom.project.setPaths([oneSourceErrorPath])
+      absoluteProjectPath = "#{packagePath}/#{projectPath}"
+      atom.project.setPaths([absoluteProjectPath])
 
     waitsForPromise ->
-      atom.workspace.open("#{oneSourceErrorPath}/OneSourceError.hs")
+      atom.workspace.open("#{absoluteProjectPath}/OneSourceError.hs")
         .then (editor) -> textEditor = editor
 
     runs ->
       textEditorElement = atom.views.getView(textEditor)
 
-  afterEach ->
-    for x in [0..100]
-      textEditor.undo()
-    textEditor.save()
+  loadOneSourceErrorProject = ->
+    loadProject('haskell/test-data/one-source-error', 'OneSourceError.hs')
+
+  loadTwoSourceErrorsProject = ->
+    loadProject('haskell/test-data/two-source-errors', 'TwoSourceErrors.hs')
 
   dispatchSourceErrorsCommand = ->
     runs ->
@@ -51,6 +60,7 @@ describe 'AtomStackIde', ->
 
   describe 'Source Errors', ->
     it 'should create a decoration when there is a source error', ->
+      loadOneSourceErrorProject()
       dispatchSourceErrorsCommand()
       waitForDecorations(1)
 
@@ -61,6 +71,7 @@ describe 'AtomStackIde', ->
         expect(correctRange).toBe true
 
     it 'should clear old decorations when the error is corrected', ->
+      loadOneSourceErrorProject()
       dispatchSourceErrorsCommand()
       waitForDecorations(1)
 
@@ -71,18 +82,24 @@ describe 'AtomStackIde', ->
       dispatchSourceErrorsCommand()
       waitForDecorations(0)
 
-    describe 'Error Handling', ->
-      PATH = null
-      beforeEach ->
-        PATH = process.env.PATH
+    it 'should create two decorations when there are two source errors', ->
+      loadTwoSourceErrorsProject()
+      dispatchSourceErrorsCommand()
+      waitForDecorations(2)
 
-      afterEach ->
-        process.env.PATH = PATH
+  describe 'Error Handling', ->
+    PATH = null
+    beforeEach ->
+      PATH = process.env.PATH
 
-      it 'should put up an error if the path does not contain the stack executable', ->
-        process.env.PATH = ''
-        dispatchSourceErrorsCommand()
+    afterEach ->
+      process.env.PATH = PATH
 
-        waitsFor ->
-          return atom.notifications.getNotifications().length == 1
+    it 'should put up an error if the path does not contain the stack executable', ->
+      process.env.PATH = ''
+      loadOneSourceErrorProject()
+      dispatchSourceErrorsCommand()
+
+      waitsFor ->
+        return atom.notifications.getNotifications().length == 1
 
