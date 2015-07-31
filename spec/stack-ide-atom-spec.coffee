@@ -31,7 +31,7 @@ describe 'AtomStackIde', ->
       atom.project.setPaths([absoluteProjectPath])
 
     waitsForPromise ->
-      atom.workspace.open("#{absoluteProjectPath}/OneSourceError.hs")
+      atom.workspace.open("#{absoluteProjectPath}/#{file}")
         .then (editor) -> textEditor = editor
 
     runs ->

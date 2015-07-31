@@ -11,6 +11,7 @@ import Control.Exception
 import Control.Monad
 import Data.IORef
 import qualified Data.Text as T
+import Data.Traversable
 import GHCJS.Foreign
 import GHCJS.Types
 import GHCJS.Utils
@@ -37,7 +38,7 @@ foreign import javascript unsafe
 
 onActivate :: IO ()
 onActivate = do
-  markerRef <- newIORef Nothing
+  markersRef <- newIORef []
 
   addCommand "atom-text-editor" "stack-ide-atom:source-errors" $ \editor -> wrap $ do
     path <- getPath editor
@@ -47,18 +48,17 @@ onActivate = do
       createSession dir
       getSourceErrors
     print sourceErrors
-    oldMarker <- readIORef markerRef
-    case oldMarker of
-      Nothing -> return ()
-      Just marker -> js_destroy marker
-    case length sourceErrors of
-      0 -> return ()
-      _ -> do
-        let (SourceError _ (ProperSpan (SourceSpan _ sx sy ex ey)) _) = head sourceErrors
-        let range = rangeBetween (sx - 1) (sy - 1) (ex - 1) (ey - 1)
-        marker <- markBufferRange editor range
-        writeIORef markerRef $ Just marker
-        consoleLog marker
-        decoration <- decorateMarker editor marker "sia-error"
-        consoleLog $ jsDecoration decoration
+    oldMarkers <- readIORef markersRef
+    case oldMarkers of
+      [] -> return ()
+      [marker] -> js_destroy marker
+    newMarkers <- flip traverse sourceErrors $ \sourceError -> do
+      let (SourceError _ (ProperSpan (SourceSpan _ sx sy ex ey)) _) = sourceError
+      let range = rangeBetween (sx - 1) (sy - 1) (ex - 1) (ey - 1)
+      marker <- markBufferRange editor range
+      consoleLog marker
+      decoration <- decorateMarker editor marker "sia-error"
+      consoleLog $ jsDecoration decoration
+      return marker
+    writeIORef markersRef newMarkers
   putStrLn "hi"
