@@ -9,5 +9,6 @@ dependencies:
 
 test:
   override:
+    - git submodule update --init --recursive
     - npm install
     - ./docker-gulp test

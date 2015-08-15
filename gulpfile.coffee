@@ -21,7 +21,7 @@ gulp.task 'configure-haskell', ['install-deps'], haskellCmds([
   'cabal configure --enable-tests --ghcjs'
 ])
 
-gulp.task 'build-haskell', [], haskellCmds([
+gulp.task 'build-haskell', ['configure-haskell'], haskellCmds([
   'cabal build'
 ])
 
