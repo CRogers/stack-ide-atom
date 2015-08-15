@@ -49,9 +49,7 @@ onActivate = do
       getSourceErrors
     print sourceErrors
     oldMarkers <- readIORef markersRef
-    case oldMarkers of
-      [] -> return ()
-      [marker] -> js_destroy marker
+    void $ traverse js_destroy oldMarkers
     newMarkers <- flip traverse sourceErrors $ \sourceError -> do
       let (SourceError _ (ProperSpan (SourceSpan _ sx sy ex ey)) _) = sourceError
       let range = rangeBetween (sx - 1) (sy - 1) (ex - 1) (ey - 1)

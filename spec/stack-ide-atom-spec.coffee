@@ -87,6 +87,18 @@ describe 'AtomStackIde', ->
       dispatchSourceErrorsCommand()
       waitForDecorations(2)
 
+    it 'should clear old decoration when an error is corrected corrected', ->
+      loadTwoSourceErrorsProject()
+      dispatchSourceErrorsCommand()
+      waitForDecorations(2)
+
+      runs ->
+        textEditor.setTextInBufferRange(new Range([4, 10], [4, 21]), '5')
+        textEditor.save()
+
+      dispatchSourceErrorsCommand()
+      waitForDecorations(1)
+
   describe 'Error Handling', ->
     PATH = null
     beforeEach ->
