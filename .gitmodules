@@ -1,0 +1,3 @@
+[submodule "stack-ide"]
+	path = stack-ide
+	url = git@github.com:commercialhaskell/stack-ide.git
