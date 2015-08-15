@@ -8,7 +8,7 @@ haskellCmds = (cmds) ->
 
 gulp.task 'create-sandbox', haskellCmds([
   'cabal sandbox init'
-  'cabal sandbox add-source ../ide-backend/ide-backend-common'
+  'cabal sandbox add-source ../stack-ide/ide-backend/ide-backend-common'
   'cabal sandbox add-source ../stack-ide/stack-ide-api'
 ])
 
