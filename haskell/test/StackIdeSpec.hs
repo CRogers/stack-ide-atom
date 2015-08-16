@@ -18,10 +18,10 @@ spec =
   describe "StackIde should" $ do
     should "respond with the version when starting up" $ do
       let program = do
-                    createSession "test-data/just-stack-yaml"
+                    createSession "test-data/no-compile-errors"
                     getVersion
       versionInfo <- runStackIde program
-      versionInfo `shouldBe` VersionInfo 0 1 0
+      versionInfo `shouldBe` VersionInfo 0 1 1
 
     should "respond with a source error if a file has a source error" $ do
       let program = do

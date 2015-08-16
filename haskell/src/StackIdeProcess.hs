@@ -23,7 +23,7 @@ command StackIdeProcess{..} req = do
 
 createStackIdeProcess :: Text -> IO StackIdeProcess
 createStackIdeProcess directory = do
-  createFromChildProcess <$> spawn "stack" ["ide"] directory
+  createFromChildProcess <$> spawn "stack" ["ide", "start"] directory
 
 createFromChildProcess :: ChildProcess -> StackIdeProcess
 createFromChildProcess childProcess =
