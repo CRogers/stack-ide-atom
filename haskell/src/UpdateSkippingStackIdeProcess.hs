@@ -19,4 +19,5 @@ makeAwaitResponse stackIdeProcess = do
   response <- awaitResponse stackIdeProcess
   case response of
     ResponseUpdateSession _ -> makeAwaitResponse stackIdeProcess
+    ResponseLog _ -> makeAwaitResponse stackIdeProcess
     res -> return res

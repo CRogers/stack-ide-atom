@@ -3,3 +3,4 @@ cabal.sandbox.config
 node_modules/
 lib/haskell/generated/
 .stack-work/
+.DS_Store
