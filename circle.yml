@@ -11,4 +11,4 @@ test:
   override:
     - git submodule update --init --recursive
     - npm install
-    - ./docker-gulp create-sandbox
+    - ./docker-gulp build-stack-ide
