@@ -23,11 +23,11 @@ spec =
       versionInfo <- runStackIde program
       versionInfo `shouldBe` VersionInfo 0 1 1
 
-    should "respond with a source error if a file has a source error" $ do
+    should "respond with a source error if a file has a source error" $ pendingWith "see https://github.com/commercialhaskell/stack-ide/issues/53" {- do
       let program = do
                     createSession "test-data/one-source-error"
                     getSourceErrors
       sourceErrors <- runStackIde program
       length sourceErrors `shouldBe` 1
       let sourceError = head sourceErrors
-      errorSpan sourceError `shouldBe` ProperSpan (SourceSpan "OneSourceError.hs" 4 8 4 9)
+      errorSpan sourceError `shouldBe` ProperSpan (SourceSpan "OneSourceError.hs" 4 8 4 9) -}
