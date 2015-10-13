@@ -6,27 +6,12 @@ shell = require('gulp-shell')
 haskellCmds = (cmds) ->
   shell.task(cmds, {cwd: 'haskell'})
 
-gulp.task 'create-sandbox', haskellCmds([
-  'cabal sandbox init'
-  './link-sandboxes.sh'
-])
-
-gulp.task 'install-deps', ['create-sandbox'], haskellCmds([
-  'cabal update'
-  'cabal install --only-dependencies --enable-tests --ghcjs'
-])
-
-gulp.task 'configure-haskell', ['install-deps'], haskellCmds([
-  'cabal configure --enable-tests --ghcjs'
-])
-
 gulp.task 'build-haskell', [], haskellCmds([
-  'cabal build'
+  'stack build --install-ghc'
 ])
 
 gulp.task 'build-stack-ide', shell.task([
-  'stack setup'
-  'stack install'
+  'stack install --install-ghc'
 ], {cwd: 'stack-ide'})
 
 hspecLoc = 'dist/build/hspec/hspec'
@@ -41,7 +26,7 @@ GENERATED_HASKELL_DIR = path.resolve('./lib/haskell/generated')
 
 gulp.task 'copy-generated-js', ['build-haskell'], shell.task([
   "cp #{GENERATED_JS_FILES} #{GENERATED_HASKELL_DIR}"
-], {cwd: 'haskell/dist/build/stack-ide-atom/stack-ide-atom.jsexe'})
+], {cwd: '.stack-work/install/x86_64-osx/ghcjs-0.1.0.20150924_ghc-7.10.2/ghcjs-0.1.0.20150924_ghc-7.10.2/bin/stack-ide-atom.jsexe'})
 
 gulp.task 'build', ['copy-generated-js'], shell.task([
   "cat ../module-start.js #{GENERATED_JS_FILES} ../module-end.js >haskell.js"

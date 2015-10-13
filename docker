@@ -1,6 +1,0 @@
-#!/bin/sh
-
-docker run -it --rm \
-  -v "$(pwd):/blah" \
-  -v "$(pwd)/.docker-stack:/root/.stack/snapshots" \
-  crogers/stack-ide-atom-docker:stack-0.1.3.1_nightly-2015-08-06
