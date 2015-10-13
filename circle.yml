@@ -1,10 +1,5 @@
-machine:
-  services:
-    - docker
-
 dependencies:
   cache_directories:
-    - "~/stack-ide-atom/.docker-stack"
     - "~/stack-ide-atom/.stack-work
 
 test:
